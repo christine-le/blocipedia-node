@@ -27,7 +27,7 @@ const config = {
       name: 'retry'
     },
     port: process.env.PORT || 3000,
-    db: 'postgres://postgres@localhost/blocipedia'
+    db: process.env.DATABASE_URL
   }
 };
 
