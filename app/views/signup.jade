@@ -1,0 +1,21 @@
+extends layout
+
+block content
+	h1 Welcome to Blocipedia
+	p.alert.alert-danger Testing error message
+
+	form(method='POST', action="/user/signup")
+		#form-group
+			label Name:
+			input.form-control(type='text', name="name", placeholder='Enter Name')
+		#form-group
+			label Email:
+			input.form-control(type='email', name="email", placeholder='Enter Email')
+		#form-group
+			label Password:
+			input.form-control(type='password', name="password", placeholder='Enter Password')
+		#form-group
+			label Password:
+			input.form-control(type='password', name="password_conf", placeholder='Enter Password confirmation')
+		br
+		input.btn.btn-primary(type='submit', value="Sign Up")
