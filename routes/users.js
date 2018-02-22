@@ -48,62 +48,51 @@ router.post('/user/signup', function(req, res){
 	}
 });
 
-router.post('/user/login', passport.authenticate('local'), function (req, res) {
-    User.findOne({
-    	email: req.body.email
-    })
-    .then(user => {
-	    // Check to see if their password is the same as the hashed one
-	    user.comparePassword(req.body.password, (err, isMatch) => {
-	    	if (isMatch) {
-	    		res.render('login.jade', { title: 'Login', msg: 'You are now logged in!' });
-	    	} else {
-	        	res.render('login.jade', { title: 'Login', error: "Unable to log in.  Please try again." });
-	        }
-    	});
-	})
-    .catch(err => {
-    	res.render('login.jade', { title: 'Login', error: err });
-    });
-});
-
-// router.post('/login', (req, res, next) => {
-//   // first - find a user by their username (which should always be unique)
-//   return User.findOne({ username: req.body.username })
-//     .then(user => {
-//       // then check to see if their password is the same as the hashed one
-//       user.comparePassword(req.body.password, (err, isMatch) => {
-//         if (isMatch) {
-//           // if so - they are logged in!
-//           return res.send('logged in!');
-//         } else {
-//           return res.redirect('/users/login');
-//         }
-//       });
+// This works
+// router.post('/user/login', function (req, res) {
+//     User.findOne({
+//     	email: req.body.email
 //     })
+//     .then(user => {
+// 	    user.comparePassword(req.body.password, (err, isMatch) => {
+// 	    	if (isMatch) {
+// 	    		// generate a signed son web token with the user object as the payload and return it in the response
+// 	    		const token = jwt.sign(user.toJSON(), 'your_jwt_secret'); 
+// 	    		// return res.json({user, token});
+
+// 	    		res.render('login.jade', { title: 'Login', msg: 'You are now logged in!' });
+// 	    	} else {
+// 	        	res.render('login.jade', { title: 'Login', error: "Unable to log in.  Please try again." });
+// 	        }
+//     	});
+// 	})
 //     .catch(err => {
-//       return res.send(err);
+//     	res.render('login.jade', { title: 'Login', error: err });
 //     });
 // });
 
-// router.post('/user/login', function (req, res, next) {
-//     passport.authenticate('local', {session: false}, (err, user, info) => {
-//         if (err || !user) {
-//             return res.status(400).json({
-//                 message: 'Unable to log in',
-//                 user   : user
-//             });
-//         }
-//        req.login(user, {session: false}, (err) => {
-//            if (err) {
-//                res.send(err);
-//            }
-//            // generate a signed son web token with the contents of user object and return it in the response
-//            const token = jwt.sign(user, 'your_jwt_secret'); 
-//            return res.json({user, token});
-//         });
-//     })(req, res);
-// });
 
+router.post('/login', function (req, res, next) {
+    passport.authenticate('local', {session: false}, (err, user, info) => {
+        console.log(err);
+        if (err || !user) {
+            return res.status(400).json({
+                message: info ? info.message : 'Login failed',
+                user   : user
+            });
+        }
+
+        req.login(user, {session: false}, (err) => {
+            if (err) {
+                res.send(err);
+            }
+
+            const token = jwt.sign(user.toJSON(), 'your_jwt_secret');
+
+            return res.json({user, token});
+        });
+    })
+    (req, res);
+});
 
 module.exports = router;
