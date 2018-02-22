@@ -2,7 +2,9 @@ extends layout
 
 block content
 	h1 Welcome to Blocipedia
-	p.alert.alert-danger Testing error message
+	-if (typeof(error) !== 'undefined'){
+		p.alert.alert-danger #{error}
+	-}
 
 	form(method='POST', action="/user/signup")
 		#form-group

@@ -9,6 +9,8 @@ const compress = require('compression');
 const methodOverride = require('method-override');
 const users = require('../routes/users');
 
+const passport = require('passport');
+
 module.exports = (app, config) => {
   const env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
@@ -37,6 +39,11 @@ module.exports = (app, config) => {
   // controllers.forEach((controller) => {
   //   require(controller)(app);
   // });
+
+  app.use(passport.initialize());
+  // app.use(passport.session());
+  // require('../config/passport.js')(passport);
+  require('../config/passport');
 
   app.use((req, res, next) => {
     var err = new Error('Not Found');

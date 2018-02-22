@@ -2,6 +2,13 @@ extends layout
 
 block content
 	h1 Welcome to Blocipedia
+	-if (typeof(msg) !== 'undefined'){
+		p.alert.alert-success #{msg}
+	-}
+	-if (typeof(error) !== 'undefined'){
+		p.alert.alert-danger #{error}
+	-}
+
 	form(method='POST', action="/user/login")
 		#form-group
 			label Email:
