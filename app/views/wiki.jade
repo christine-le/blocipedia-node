@@ -1,0 +1,8 @@
+extends layout
+
+block content
+	h1 Wikis
+	p
+	a.btn.btn-primary(href='/wiki') New Wiki
+	each wiki in wikis
+		#{wiki.title}

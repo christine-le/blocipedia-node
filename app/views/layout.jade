@@ -16,6 +16,8 @@ html
           a.navbar-brand(href='/') Blocipedia
         div.collapse.navbar-collapse(id='bs-example-navbar-collapse-1')
           ul.nav.navbar-nav.navbar-right
+            li 
+              a(href='/wikis') Wikis
             if (!user)
               li
                 a(href='/login') Login
@@ -23,12 +25,13 @@ html
                 a(href='/signup') Sign Up
             if (user)
               li
-                a Welcome #{user.name}
+                a Welcome #{user.name}!
               li
                 a(href='/logout') Logout
-
     div.container
       div.content
+        if (user)
+          div.content Signed in as: #{user.name} | Current role: #{user.role || 'Standard'}
         block content
 
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')

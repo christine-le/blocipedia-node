@@ -21,6 +21,7 @@
     "jsonwebtoken": "^8.1.1",
     "method-override": "^2.3.0",
     "morgan": "^1.6.1",
+    "mysql": "^2.15.0",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
     "passport-local": "^1.0.0",

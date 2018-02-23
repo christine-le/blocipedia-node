@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const compress = require('compression');
 const methodOverride = require('method-override');
 const users = require('../routes/users');
+const wikis = require('../routes/wikis');
 
 const passport = require('passport');
 
@@ -34,6 +35,7 @@ module.exports = (app, config) => {
   // require('../routes/users')(app);    // add routes
   // app.use('/users', users);
   app.use(users);
+  app.use(wikis);
   // CHRISTINE:  Removed following
   // var controllers = glob.sync(config.root + '/app/controllers/*.js');
   // controllers.forEach((controller) => {

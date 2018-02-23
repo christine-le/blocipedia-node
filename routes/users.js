@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../app/models').User;
+const Wiki = require('../app/models').Wiki;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
@@ -89,10 +90,17 @@ router.post('/login', function (req, res, next) {
 
             const token = jwt.sign(user.toJSON(), 'your_jwt_secret');
 
-            return res.json({user, token});
+            // return res.json({user, token});
+        	res.render('index.jade', {user, title: 'Blocipedia'});
         });
     })
     (req, res);
 });
+
+router.get('/logout', function (req, res, next) {
+	req.logout();
+	res.render('index.jade', {title: 'Blocipedia'});
+});
+
 
 module.exports = router;
