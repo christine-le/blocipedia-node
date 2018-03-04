@@ -12,6 +12,28 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
+    return queryInterface.bulkInsert('Wikis', [{
+        title: 'Wiki 1',
+        body: 'Wiki 1 body',
+        private: false,
+        UserId: 1,
+        createdAt: Sequelize.literal('NOW()'),
+        updatedAt: Sequelize.literal('NOW()')
+      },{
+        title: 'Wiki 2',
+        body: 'Wiki 2 body',
+        private: false,
+        UserId: 2,
+        createdAt: Sequelize.literal('NOW()'),
+        updatedAt: Sequelize.literal('NOW()')
+      },{
+        title: 'Wiki 3',
+        body: 'Wiki 3 body',
+        private: false,
+        UserId: 3,
+        createdAt: Sequelize.literal('NOW()'),
+        updatedAt: Sequelize.literal('NOW()')
+      }], {});
   },
 
   down: (queryInterface, Sequelize) => {
@@ -22,5 +44,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('Person', null, {});
     */
+    return queryInterface.bulkDelete('Wikis', null, {});
   }
 };

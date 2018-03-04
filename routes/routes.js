@@ -7,15 +7,17 @@ module.exports = (app) => {
 };
 
 router.get('/', (req, res, next) => {
-	res.render('index.jade');
+	res.render('index.ejs');
 });
 
 router.get('/login', function(req, res){
-  res.render('login.jade', { title: 'login' });
+  // res.render('login.ejs', { title: 'login' });
+  res.render('login.ejs');
 });
 
 router.get('/signup', function(req, res){
-  res.render('signup.jade', { title: 'signup' });
+  // res.render('signup.ejs', { title: 'signup' });
+  res.render('signup.ejs');
 });
 
 // router.get('/', (req, res, next) => {

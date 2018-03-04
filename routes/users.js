@@ -11,15 +11,15 @@ const passport = require('passport');
 // };
 
 router.get('/', (req, res, next) => {
-	res.render('index.jade');
+	res.render('index.ejs');
 });
 
 router.get('/login', function(req, res){
-  res.render('login.jade', { title: 'Login' });
+  res.render('login.ejs', { title: 'Login' });
 });
 
 router.get('/signup', function(req, res){
-  res.render('signup.jade', { title: 'Signup' });
+	res.render('signup.ejs', { title: 'Signup' });
 });
 
 router.post('/user/signup', function(req, res){
@@ -27,9 +27,9 @@ router.post('/user/signup', function(req, res){
 	const email = req.body.email;
 	const password = req.body.password;
 	const password_conf = req.body.password_conf;
-
+	
 	if (password != password_conf) {
-		res.render('signup.jade', { title: 'Signup', errors: "Password confirmation does not match.  Please try again." });
+		res.render('signup.ejs', { title: 'Signup', error: "Password confirmation does not match.  Please try again." });
 	}
 	else {
 		let newUser = User.build({
@@ -41,16 +41,15 @@ router.post('/user/signup', function(req, res){
 		newUser
 			.save()
 			.then(user => {
-				res.render('login.jade', { title: 'Login', msg: 'You are now signed up and can log in!' });
+				res.render('login.ejs', { title: 'Login', msg: 'You are now signed up and can log in!' });
 			})
 			.catch(err => {
-				res.render('signup.jade', { title: 'Signup', errors: "There were problems with the sign up.  Please try again." });
+				res.render('signup.ejs', { title: 'Signup', error: "There were problems with the sign up.  Please try again." });
 			});
 	}
 });
 
-// This works
-// router.post('/user/login', function (req, res) {
+// router.post('/login', function (req, res) {
 //     User.findOne({
 //     	email: req.body.email
 //     })
@@ -60,22 +59,19 @@ router.post('/user/signup', function(req, res){
 // 	    		// generate a signed son web token with the user object as the payload and return it in the response
 // 	    		const token = jwt.sign(user.toJSON(), 'your_jwt_secret'); 
 // 	    		// return res.json({user, token});
-
-// 	    		res.render('login.jade', { title: 'Login', msg: 'You are now logged in!' });
+// 	    		res.render('login.ejs', { title: 'Login', msg: 'You are now logged in!' });
 // 	    	} else {
-// 	        	res.render('login.jade', { title: 'Login', error: "Unable to log in.  Please try again." });
+// 	        	res.render('login.ejs', { title: 'Login', error: "Unable to log in.  Please try again." });
 // 	        }
 //     	});
 // 	})
 //     .catch(err => {
-//     	res.render('login.jade', { title: 'Login', error: err });
+//     	res.render('login.ejs', { title: 'Login', error: err });
 //     });
 // });
 
-
 router.post('/login', function (req, res, next) {
     passport.authenticate('local', {session: false}, (err, user, info) => {
-        console.log(err);
         if (err || !user) {
             return res.status(400).json({
                 message: info ? info.message : 'Login failed',
@@ -91,7 +87,7 @@ router.post('/login', function (req, res, next) {
             const token = jwt.sign(user.toJSON(), 'your_jwt_secret');
 
             // return res.json({user, token});
-        	res.render('index.jade', {user, title: 'Blocipedia'});
+        	res.render('index.ejs', {user, title: 'Blocipedia', token});
         });
     })
     (req, res);
@@ -99,8 +95,7 @@ router.post('/login', function (req, res, next) {
 
 router.get('/logout', function (req, res, next) {
 	req.logout();
-	res.render('index.jade', {title: 'Blocipedia'});
+	res.render('index.ejs', {title: 'Blocipedia'});
 });
-
 
 module.exports = router;

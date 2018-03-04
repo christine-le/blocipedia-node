@@ -6,28 +6,34 @@ const config = {
   development: {
     root: rootPath,
     app: {
-      name: 'retry'
+      name: 'blocipedia'
     },
     port: process.env.PORT || 3000,
-    db: 'postgres://postgres@localhost/blocipedia'
+    db: 'postgres://postgres@localhost/blocipedia',
+    database: 'blocipedia',
+    dialect: 'postgres'
   },
 
   test: {
     root: rootPath,
     app: {
-      name: 'retry'
+      name: 'blocipedia'
     },
     port: process.env.PORT || 3000,
-    db: 'postgres://postgres@localhost/blocipedia'
+    db: 'postgres://postgres@localhost/blocipedia',
+    database: 'blocipedia',
+    dialect: 'postgres'
   },
 
   production: {
     root: rootPath,
     app: {
-      name: 'retry'
+      name: 'blocipedia'
     },
     port: process.env.PORT || 3000,
-    db: process.env.DATABASE_URL
+    db: process.env.DATABASE_URL,
+    database: 'blocipedia',
+    dialect: 'postgres'
   }
 };
 
@@ -35,7 +41,7 @@ const config = {
 //   development: {
 //     root: rootPath,
 //     app: {
-//       name: 'retry'
+//       name: 'blocipedia'
 //     },
 //     // "username": 'postgres',
 //     // "password": null,
@@ -46,11 +52,10 @@ const config = {
 //     url: 'postgres://postgres@localhost/blocipedia',
 //     dialect: 'postgres'
 //   },
-
 //   test: {
-//      root: rootPath,
+//     root: rootPath,
 //     app: {
-//       name: 'retry'
+//       name: 'blocipedia'
 //     },
 //     "username": 'postgres',
 //     "password": null,
@@ -60,18 +65,18 @@ const config = {
 //     database: 'blocipedia',
 //     dialect: 'postgres'
 //   },
-
 //   production: {
 //      root: rootPath,
 //     app: {
-//       name: 'retry'
+//       name: 'blocipedia'
 //     },
 //     "username": 'postgres',
 //     "password": null,
 //     port: process.env.PORT || 3000,
 //     url: process.env.DATABASE_URL,
 //     database: 'blocipedia',
-//     dialect: 'postgres'
+//     dialect: 'postgres',
+//     use_env_variable: process.env.DATABASE_URL
 //   }
 // };
 

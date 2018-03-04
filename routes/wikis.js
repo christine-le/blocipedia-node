@@ -13,11 +13,10 @@ router.get('/wikis', (req, res, next) => {
     	}
     })
     .then(wikis => {
-    	console.log('wikis', wikis);
-		res.render('wiki.jade', { title: 'Wikis'}, wikis);
+		res.render('wiki.ejs', {wikis, title: 'Wikis'});
 	})
     .catch(err => {
-    	res.render('wiki.jade', { title: 'Wikis'});
+    	res.render('wiki.ejs', { title: 'Wikis'});
     });
 });
 

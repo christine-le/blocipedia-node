@@ -1,0 +1,18 @@
+<% include header %>
+
+  	<main class="container">
+  		<%if (typeof user != "undefined"){%>
+	    	<div class="alert alert-success alert-dismissible">Welcome <%= user.name %>!</div>
+	  	<% } %>
+        <!-- Jumbotron Header -->
+        <header class="jumbotron my-4">
+          	<h1 class="display-3">Welcome to Blocipedia</h1>
+          	<p class="lead">An application for users to create, collaborate, and share wikis.</p>
+		 	<%if (typeof user == "undefined"){%>
+		 		<a href="/signup" class="btn btn-primary">Sign up</a>
+	          	<a href="/login" class="btn btn-secondary">Login</a>
+			<% } %>
+        </header>
+	</main>
+
+<% include footer %>
