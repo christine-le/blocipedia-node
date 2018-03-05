@@ -1,24 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Wiki = require('../app/models').Wiki;
+const wikiController = require("../app/controllers/wikiController");
 
-// module.exports = (app) => {
-//   app.use('/', router);
-// };
+router.get("/wikis", wikiController.wiki_list);
 
-router.get('/wikis', (req, res, next) => {
-    Wiki.findAll({
-    	where: {
-    		private: false
-    	}
-    })
-    .then(wikis => {
-		res.render('wiki.ejs', {wikis, title: 'Wikis'});
-	})
-    .catch(err => {
-    	res.render('wiki.ejs', { title: 'Wikis'});
-    });
-});
-
+router.get("/wiki/:id", wikiController.wiki);
 
 module.exports = router;

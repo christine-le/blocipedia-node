@@ -5,6 +5,7 @@ const Wiki = require('../app/models').Wiki;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+var stripe = require("stripe")("sk_test_wPNyoJk9MwDSGISSelw3bpD5");
 
 // module.exports = (app) => {
 //   app.use('/', router);
@@ -20,6 +21,27 @@ router.get('/login', function(req, res){
 
 router.get('/signup', function(req, res){
 	res.render('signup.ejs', { title: 'Signup' });
+});
+
+router.get('/profile', function(req, res){
+	res.render('profile.ejs', {user, title: 'Profile' });
+});
+
+router.post('/user/update', function(req, res){
+	
+});
+
+router.post('/user/upgrade', function(req, res){
+	var stripeToken = req.body.stripeToken;
+	// Charge the user's card:
+	stripe.charges.create({
+	  amount: 1500,
+	  currency: "usd",
+	  description: "Example charge",
+	  source: stripeToken,
+	}, function(err, charge) {
+	  // asynchronously called
+	});
 });
 
 router.post('/user/signup', function(req, res){

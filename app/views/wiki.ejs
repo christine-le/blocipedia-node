@@ -1,21 +1,12 @@
 <% include header %>
-<h1>All Wikis</h1>
+<h1><%= wiki.title %></h1>
 <div class="row">
   <div class="col-md-8">
-    <% for(var i=0; i< wikis.length; i++) {%>
-      <div class="media">
-        <div class="media-body">
-          <h4 class="media-heading">
-            <p>
-            	<a href="#"><%= wikis[i].title %></a>
-            </p>
-          </h4>
-        </div>
-      </div>
-    <% } %>
+    <%- wiki.body %><br>
   </div>
   <div class="col-md-4">
-    <a href="/wiki" class="btn btn-primary">New Wiki</a>
+    <a href="wiki/edit" class="btn btn-success">Edit</a>
+    <a href="wiki/delete" class="btn btn-danger">Delete</a>
   </div>
 </div>
 <% include footer %>
