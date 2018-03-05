@@ -1,20 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const staticController = require("../app/controllers/staticController");
 
-router.get('/', (req, res, next) => {
-	res.render('index.ejs');
-});
+router.get("/", staticController.index);
 
-router.get('/login', function(req, res){
-  res.render('login.ejs', { title: 'Login' });
-});
+router.get("/user/login", staticController.login);
 
-router.get('/signup', function(req, res){
-	res.render('signup.ejs', { title: 'Signup' });
-});
+router.get("/user/signup", staticController.signup);
 
-router.get('/profile', function(req, res){
-	res.render('profile.ejs', {user, title: 'Profile' });
-});
+router.get("/user/profile", staticController.profile);
 
 module.exports = router;

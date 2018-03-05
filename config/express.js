@@ -19,7 +19,7 @@ module.exports = (app, config) => {
   app.locals.ENV_DEVELOPMENT = env == 'development';
   
   app.set('views', config.root + '/app/views');
-  app.set('view engine', 'jade');
+  app.set('view engine', 'ejs');
 
   // app.use(favicon(config.root + '/public/img/favicon.ico'));
   app.use(logger('dev'));
@@ -32,21 +32,11 @@ module.exports = (app, config) => {
   app.use(express.static(config.root + '/public'));
   app.use(methodOverride());
 
-  // CHRISTINE:  Added following
-  // require('../routes/users')(app);    // add routes
-  // app.use('/users', users);
   app.use(static);
   app.use(users);
   app.use(wikis);
-  // CHRISTINE:  Removed following
-  // var controllers = glob.sync(config.root + '/app/controllers/*.js');
-  // controllers.forEach((controller) => {
-  //   require(controller)(app);
-  // });
 
   app.use(passport.initialize());
-  // app.use(passport.session());
-  // require('../config/passport.js')(passport);
   require('../config/passport');
 
   app.use((req, res, next) => {
