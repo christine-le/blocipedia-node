@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const compress = require('compression');
 const methodOverride = require('method-override');
+const static = require('../routes/static');
 const users = require('../routes/users');
 const wikis = require('../routes/wikis');
 
@@ -34,6 +35,7 @@ module.exports = (app, config) => {
   // CHRISTINE:  Added following
   // require('../routes/users')(app);    // add routes
   // app.use('/users', users);
+  app.use(static);
   app.use(users);
   app.use(wikis);
   // CHRISTINE:  Removed following
