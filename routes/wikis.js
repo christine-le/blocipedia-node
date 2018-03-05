@@ -3,8 +3,8 @@ const router = express.Router();
 const Wiki = require('../app/models').Wiki;
 const wikiController = require("../app/controllers/wikiController");
 
-router.get("/wikis", wikiController.wiki_list);
+router.get("/wikis", wikiController.show);
 
-router.get("/wiki/:id", wikiController.wiki);
+router.get("/wikis/:id", wikiController.wiki);
 
 module.exports = router;

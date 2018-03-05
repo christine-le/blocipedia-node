@@ -4,10 +4,9 @@ const staticController = require("../app/controllers/staticController");
 
 router.get("/", staticController.index);
 
-router.get("/user/login", staticController.login);
+router.get("/users/login", staticController.login);
 
-router.get("/user/signup", staticController.signup);
+router.get("/users/signup", staticController.signup);
 
-router.get("/user/profile", staticController.profile);
 
 module.exports = router;

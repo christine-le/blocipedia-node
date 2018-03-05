@@ -86,8 +86,30 @@ module.exports = {
 	        });
 	    })
 	    (req, res);
+   	},
+	show(req, res, next){
+		User.findById(req.params.id)
+	    .then(user => {
+			// res.send('NOT IMPLEMENTED: User Update');
+			res.render('users/show.ejs', { user });
+		})
+	    .catch(err => {
+	    	res.render('index.ejs', {user, title: 'Blocipedia'});
+	    });
+	},
+	edit(req, res, next){
+		User.findById(req.params.id)
+	    .then(user => {
+			res.render('users/edit.ejs', {user, title: 'Blocipedia'});
+		})
+	    .catch(err => {
+	    	res.render('index.ejs', {user, title: 'Blocipedia'});
+	    })
    	}
 }
+
+
+
 
 // router.post('/login', function (req, res) {
 //     User.findOne({

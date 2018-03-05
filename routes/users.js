@@ -2,14 +2,18 @@ const express = require('express');
 const router = express.Router();
 const userController = require("../app/controllers/userController");
 
-router.post("/user/update", userController.update);
+router.post("/users/update", userController.update);
 
-router.post("/user/upgrade", userController.upgrade);
+router.post("/users/upgrade", userController.upgrade);
 
-router.get("/user/logout", userController.logout);
+router.get("/users/logout", userController.logout);
 
-router.post("/user/signup", userController.signup);
+router.post("/users/signup", userController.signup);
 
-router.post("/user/login", userController.login);
+router.post("/users/login", userController.login);
+
+router.get("/users/:id", userController.show);
+
+router.get("/users/edit/:id", userController.edit);
 
 module.exports = router;

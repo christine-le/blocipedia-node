@@ -20,15 +20,14 @@
             <ul class="navbar-nav ml-auto">
               <li class="nav-item"><a class="nav-link" href="/wikis">Wikis</a></li>
               <% if (typeof user == "undefined"){ %>
-                <li class="nav-item"><a class="nav-link" href="/user/login">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="/user/signup">Sign Up</a></li>
+                <li class="nav-item"><a class="nav-link" href="/users/login">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/users/signup">Sign Up</a></li>
               <% } else { %>
-                <li class="nav-item"><a class="nav-link" href="/user/profile">Edit Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="/user/logout">Sign out</a></li>
+                <li class="nav-item"><a class="nav-link" href="/users/edit/<%= user.id %>"><%= user.name %></a></li>
+                <li class="nav-item"><a class="nav-link" href="/users/logout">Sign out</a></li>
               <% } %>
             </ul>
           </div>
         </div>
       </nav>
       
-	
