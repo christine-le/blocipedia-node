@@ -46,7 +46,7 @@ module.exports = {
 		const password_conf = req.body.password_conf;
 		
 		if (password != password_conf) {
-			res.render('signup.ejs', { title: 'Signup', error: "Password confirmation does not match.  Please try again." });
+			res.render('users/signup.ejs', { title: 'Signup', error: "Password confirmation does not match.  Please try again." });
 		}
 		else {
 			let newUser = User.build({
@@ -58,10 +58,10 @@ module.exports = {
 			newUser
 				.save()
 				.then(user => {
-					res.render('login.ejs', { title: 'Login', msg: 'You are now signed up and can log in!' });
+					res.render('users/login.ejs', { title: 'Login', msg: 'You are now signed up and can log in!' });
 				})
 				.catch(err => {
-					res.render('signup.ejs', { title: 'Signup', error: "There were problems with the sign up.  Please try again." });
+					res.render('users/signup.ejs', { title: 'Signup', error: "There were problems with the sign up.  Please try again." });
 				});
 		}
    	},

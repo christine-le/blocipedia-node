@@ -9,48 +9,27 @@ passport.use(new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password'
     },
-    function (email, password, cb) {
-        return User.findOne({email:email})
-            .then(user => {
-                if (!user) {
-                    return cb(null, false, {message: 'Incorrect email or password.'});
-                }
-                return cb(null, user, {
-                    message: 'Logged In Successfully'
-                });
-            })
-            .catch(err => {
-                return cb(err);
-            });
+    function (email, password, callback) {
+      return User.findOne({ where: {email: email}})
+      .then(user => {
+        if (!user) {
+          return callback(null, false, {error: 'Incorrect email'});
+        }
+        return user.comparePassword(password, (err, isMatch) => {
+          if (err) { return callback(null, false, { error: err }); }
+
+          if (!isMatch) {
+            return callback(null, false, { error: 'Incorrect password'});
+          }
+
+          return callback(null, user, {message: 'Logged In Successfully'} );
+        });
+      })
+      .catch(err => {
+        return callback(err);
+      });
     }
 ));
-
-// passport.use(new LocalStrategy({
-//         usernameField: 'email',
-//         passwordField: 'password'
-//     },
-//     function (email, password, callback) {
-//       return User.findOne({ where: {email: email}})
-//       .then(user => {
-//         if (!user) {
-//           return callback(null, false, {error: 'Incorrect email.'});
-//         }
-//         console.log("user>>>>>>", typeof user);
-//         return user.comparePassword(password, (err, isMatch) => {
-//           if (err) { return callback(null, false, { error: err }); }
-
-//           if (!isMatch) {
-//             return callback(null, false, { error: 'Incorrect password'});
-//           }
-
-//           return callback(null, user, {message: 'Logged In Successfully'} );
-//         });
-//       })
-//       .catch(err => {
-//         return callback(err);
-//       });
-//     }
-// ));
 
 passport.use(new JWTStrategy({
         jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
