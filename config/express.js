@@ -12,8 +12,11 @@ const users = require('../routes/users');
 const wikis = require('../routes/wikis');
 
 const passport = require('passport');
+const session = require("express-session");
+const flash = require("express-flash");
 
 module.exports = (app, config) => {
+  require("dotenv").config();
   const env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
   app.locals.ENV_DEVELOPMENT = env == 'development';
@@ -21,7 +24,6 @@ module.exports = (app, config) => {
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'ejs');
 
-  // app.use(favicon(config.root + '/public/img/favicon.ico'));
   app.use(logger('dev'));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
@@ -32,12 +34,24 @@ module.exports = (app, config) => {
   app.use(express.static(config.root + '/public'));
   app.use(methodOverride());
 
+  app.use(session({
+    secret: process.env.cookie_secret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60000 }
+  }));
+  app.use(flash());
+
+  passport.init(app);
+
+  app.use((req,res,next) => {
+    res.locals.currentUser = req.user;
+    next();
+  })
+
   app.use(static);
   app.use(users);
   app.use(wikis);
-
-  app.use(passport.initialize());
-  require('../config/passport');
 
   app.use((req, res, next) => {
     var err = new Error('Not Found');

@@ -1,9 +1,7 @@
 <% include ../partials/header.ejs %>
 
 <h2>Welcome to Blocipedia</h2>
-  <%if (typeof error != "undefined"){%>
-    <p class="alert alert-danger"><%= error %></p>
-  <% } %>
+  <% include ../partials/messages.ejs %>
   <div class="row">
     <div class="col-md-8">
       <form method="POST" action="/users/signup">

@@ -8,5 +8,4 @@ router.get("/users/login", staticController.login);
 
 router.get("/users/signup", staticController.signup);
 
-
 module.exports = router;

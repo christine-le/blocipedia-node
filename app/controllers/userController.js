@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models').User;
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const stripe = require("stripe")("sk_test_wPNyoJk9MwDSGISSelw3bpD5");
+const stripe = require("stripe")(process.env.stripe_secret);
 
 module.exports = {
 	update(req, res, next){
@@ -46,7 +45,8 @@ module.exports = {
 		const password_conf = req.body.password_conf;
 		
 		if (password != password_conf) {
-			res.render('users/signup.ejs', { title: 'Signup', error: "Password confirmation does not match.  Please try again." });
+			req.flash("notice", "Password confirmation does not match.  Please try again.")
+			res.redirect("/users/signup.ejs");
 		}
 		else {
 			let newUser = User.build({
@@ -58,31 +58,43 @@ module.exports = {
 			newUser
 				.save()
 				.then(user => {
-					res.render('users/login.ejs', { title: 'Login', msg: 'You are now signed up and can log in!' });
+					req.flash("notice", "You are now signed up and can log in!")
+					res.redirect("/users/login.ejs");
 				})
 				.catch(err => {
 					res.render('users/signup.ejs', { title: 'Signup', error: "There were problems with the sign up.  Please try again." });
 				});
 		}
    	},
+ //   	login(req, res, next){
+	//   passport.authenticate("local")(req, res, function () {
+	//     if(!req.user){
+	//     	console.log("not found****");
+	//       	req.flash("notice", "Log in failed. Please try again.")
+	//       	res.redirect("/users/login.ejs");
+	//     } else {
+	//     	console.log("found*****");
+	//       	req.flash("notice", "You've successfully signed in!");
+	//       	res.redirect("/");
+	//     }
+	//   })
+	// },
    	login(req, res, next){
-   		passport.authenticate('local', {session: false}, (err, user, info) => {
+   		passport.authenticate('local', (err, user, info) => {
 	        if (err || !user) {
-	            return res.status(400).json({
-	                message: info ? info.message : 'Login failed',
-	                user   : user
-	            });
+	        	console.log("not found****");
+	            req.flash("notice", "Sign in failed. Please try again.")
+				res.redirect("/users/signup.ejs");
 	        }
-
 	        req.login(user, {session: false}, (err) => {
 	            if (err) {
 	                res.send(err);
 	            }
+    			console.log("found*****");
 
-	            const token = jwt.sign(user.toJSON(), 'your_jwt_secret');
-
-	            // return res.json({user, token});
-	        	res.render('index.ejs', {user, title: 'Blocipedia', token});
+	        	req.flash("notice", "You've successfully signed in!");
+				// res.redirect("/");
+				res.redirect("index.ejs");
 	        });
 	    })
 	    (req, res);
@@ -90,44 +102,27 @@ module.exports = {
 	show(req, res, next){
 		User.findById(req.params.id)
 	    .then(user => {
-			// res.send('NOT IMPLEMENTED: User Update');
 			res.render('users/show.ejs', { user });
 		})
 	    .catch(err => {
-	    	res.render('index.ejs', {user, title: 'Blocipedia'});
+	    	res.render('index.ejs', {user});
 	    });
 	},
 	edit(req, res, next){
 		User.findById(req.params.id)
 	    .then(user => {
-			res.render('users/edit.ejs', {user, title: 'Blocipedia'});
+			res.render('users/edit.ejs', {user});
 		})
 	    .catch(err => {
-	    	res.render('index.ejs', {user, title: 'Blocipedia'});
+	    	res.render('index.ejs', {user});
 	    })
-   	}
+   	},
+   	authenticate(req, res, next) {
+	    if (!req.user){
+	      req.flash("notice", "You must be signed in to do that")
+	      return res.redirect("/users/login");
+	    } else {
+	      next();
+	    }
+	}
 }
-
-
-
-
-// router.post('/login', function (req, res) {
-//     User.findOne({
-//     	email: req.body.email
-//     })
-//     .then(user => {
-// 	    user.comparePassword(req.body.password, (err, isMatch) => {
-// 	    	if (isMatch) {
-// 	    		// generate a signed son web token with the user object as the payload and return it in the response
-// 	    		const token = jwt.sign(user.toJSON(), 'your_jwt_secret'); 
-// 	    		// return res.json({user, token});
-// 	    		res.render('login.ejs', { title: 'Login', msg: 'You are now logged in!' });
-// 	    	} else {
-// 	        	res.render('login.ejs', { title: 'Login', error: "Unable to log in.  Please try again." });
-// 	        }
-//     	});
-// 	})
-//     .catch(err => {
-//     	res.render('login.ejs', { title: 'Login', error: err });
-//     });
-// });

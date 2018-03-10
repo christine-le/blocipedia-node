@@ -1,49 +1,24 @@
 'use strict';
+const faker = require("faker");
+let wikis = [];
+
+for(let i = 1 ; i <= 15 ; i++){
+  wikis.push({
+    title: faker.hacker.noun(),
+    body: faker.hacker.phrase(),
+    private: false,
+    UserId: Math.floor(Math.random() * (4 - 1 + 1)) + 1,   // pick random user IDs between 1 - 3
+    createdAt: new Date(),
+    updatedAt: new Date()
+  });
+}
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkInsert('Person', [{
-        name: 'John Doe',
-        isBetaMember: false
-      }], {});
-    */
-    return queryInterface.bulkInsert('Wikis', [{
-        title: 'Wiki 1',
-        body: 'Wiki 1 body',
-        private: false,
-        UserId: 1,
-        createdAt: Sequelize.literal('NOW()'),
-        updatedAt: Sequelize.literal('NOW()')
-      },{
-        title: 'Wiki 2',
-        body: 'Wiki 2 body',
-        private: false,
-        UserId: 2,
-        createdAt: Sequelize.literal('NOW()'),
-        updatedAt: Sequelize.literal('NOW()')
-      },{
-        title: 'Wiki 3',
-        body: 'Wiki 3 body',
-        private: false,
-        UserId: 3,
-        createdAt: Sequelize.literal('NOW()'),
-        updatedAt: Sequelize.literal('NOW()')
-      }], {});
+    return queryInterface.bulkInsert("Wikis", wikis, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkDelete('Person', null, {});
-    */
     return queryInterface.bulkDelete('Wikis', null, {});
   }
 };
