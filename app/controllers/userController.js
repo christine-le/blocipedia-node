@@ -6,6 +6,14 @@ const passport = require('passport');
 const stripe = require("stripe")(process.env.stripe_secret);
 
 module.exports = {
+	authenticate(req, res, next) {
+	    if (!req.user){
+	      req.flash("notice", "Please sign in")
+	      return res.redirect("/users/login");
+	    } else {
+	      next();
+	    }
+	},
 	update(req, res, next){
 		User.findById(req.params.id)
 	    .then(user => {
@@ -36,7 +44,13 @@ module.exports = {
    	},
    	logout(req, res, next){
 		req.logout();
-		res.render('index.ejs', {title: 'Blocipedia'});
+
+		req.flash("notice", "You've successfully signed out!");
+		res.redirect("/");
+
+		req.session.destroy(function (err) {
+		    res.redirect('/'); //Inside a callback… bulletproof!
+		});
    	},
    	signup(req, res, next){
 		const name = req.body.name;
@@ -66,46 +80,25 @@ module.exports = {
 				});
 		}
    	},
- //   	login(req, res, next){
-	//   passport.authenticate("local")(req, res, function () {
-	//     if(!req.user){
-	//     	console.log("not found****");
-	//       	req.flash("notice", "Log in failed. Please try again.")
-	//       	res.redirect("/users/login.ejs");
-	//     } else {
-	//     	console.log("found*****");
-	//       	req.flash("notice", "You've successfully signed in!");
-	//       	res.redirect("/");
-	//     }
-	//   })
-	// },
    	login(req, res, next){
-   		passport.authenticate('local', (err, user, info) => {
-	        if (err || !user) {
-	        	console.log("not found****");
-	            req.flash("notice", "Sign in failed. Please try again.")
-				res.redirect("/users/signup.ejs");
-	        }
-	        req.login(user, {session: false}, (err) => {
-	            if (err) {
-	                res.send(err);
-	            }
-    			console.log("found*****");
-
-	        	req.flash("notice", "You've successfully signed in!");
-				// res.redirect("/");
-				res.redirect("index.ejs");
-	        });
-	    })
-	    (req, res);
-   	},
+	  passport.authenticate("local")(req, res, function () {
+	    if(!req.user){
+	      	req.flash("notice", "Log in failed. Please try again.")
+	      	res.redirect("/users/login.ejs");
+	    } else {
+	      	req.flash("notice", "You've successfully signed in!");
+	      	res.redirect("/");
+	    }
+	  })
+	},
 	show(req, res, next){
 		User.findById(req.params.id)
 	    .then(user => {
-			res.render('users/show.ejs', { user });
+			res.redirect('users/show.ejs');
 		})
 	    .catch(err => {
-	    	res.render('index.ejs', {user});
+	    	req.flash("error", err);
+	    	res.redirect("/");
 	    });
 	},
 	edit(req, res, next){
@@ -114,15 +107,8 @@ module.exports = {
 			res.render('users/edit.ejs', {user});
 		})
 	    .catch(err => {
-	    	res.render('index.ejs', {user});
+	    	req.flash("error", err);
+	    	res.redirect("/");
 	    })
-   	},
-   	authenticate(req, res, next) {
-	    if (!req.user){
-	      req.flash("notice", "You must be signed in to do that")
-	      return res.redirect("/users/login");
-	    } else {
-	      next();
-	    }
-	}
+   	}
 }

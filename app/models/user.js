@@ -28,19 +28,15 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true
   });
 
-  User.prototype.comparePassword = function(userPassword, databasePassword){
-      return bcrypt.compareSync(userPassword, databasePassword);
+  User.prototype.comparePassword = function(password, cb) {
+    bcrypt.compare(password, this.password, function(err, isMatch){
+      if(err){
+        return cb(err);
+      } else {
+        cb(null, isMatch);
+      }
+    });
   }
-
-  // User.prototype.comparePassword = function(password, cb) {
-  //   bcrypt.compare(password, this.password, function(err, isMatch){
-  //     if(err){
-  //       return cb(err);
-  //     } else {
-  //       cb(null, isMatch);
-  //     }
-  //   });
-  // }
 
   // Create a hook
   User.beforeCreate((user, options) => {

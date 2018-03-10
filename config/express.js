@@ -42,10 +42,13 @@ module.exports = (app, config) => {
   }));
   app.use(flash());
 
-  passport.init(app);
+  app.use(passport.initialize());
+  app.use(passport.session());
+  require('./passport');
 
+  // Set user variable for templates
   app.use((req,res,next) => {
-    res.locals.currentUser = req.user;
+    res.locals.user = req.user;
     next();
   })
 
@@ -78,6 +81,8 @@ module.exports = (app, config) => {
       title: 'error'
     });
   });
+
+
 
   return app;
 };
