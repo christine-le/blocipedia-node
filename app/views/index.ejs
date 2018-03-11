@@ -1,9 +1,10 @@
 <% include partials/header.ejs %>
-
   	<main class="container">
-  		<%if (typeof user != "undefined"){%>
-	    	<div class="alert alert-success alert-dismissible">Welcome <%= user.name %>!</div>
-	  	<% } %>
+    <% include partials/messages.ejs %>
+	    	<% if(user) { %>
+        	Signed in as: <strong><%= user.name %></strong> |
+        	<a href="/users/edit/<%= user.id %>">Edit Profile</a>
+        <% } %>
         <!-- Jumbotron Header -->
         <header class="jumbotron my-4">
           	<h1 class="display-3">Welcome to Blocipedia</h1>

@@ -1,21 +1,17 @@
 <% include ../partials/header.ejs %>
-<h1>All Wikis</h1>
-<div class="row">
-  <div class="col-md-8">
-    <% for(var i=0; i< wikis.length; i++) {%>
-      <div class="media">
-        <div class="media-body">
-          <h4 class="media-heading">
-            <p>
-            	<a href="wikis/<%= wikis[i].id %>"><%= wikis[i].title %></a>
-            </p>
-          </h4>
-        </div>
-      </div>
-    <% } %>
-  </div>
-  <div class="col-md-4">
-    <a href="/wiki" class="btn btn-primary">New Wiki</a>
-  </div>
-</div>
+<main class="container">
+	<h1><%= wiki.title %></h1>
+	<% include ../partials/messages.ejs %>
+	<div class="row">
+	  <div class="col-md-8">
+	    <%- wiki.body %><br>
+	  </div>
+	  <div class="col-md-4">
+	    <a href="/wikis/<%= wiki.id %>/edit" class="btn btn-success">Edit</a>
+	    <form style="display:initial"  action="/wikis/<%= wiki.id %>/destroy" method="post">
+        	<button type="submit" class="btn btn-danger">Delete</button>
+      	</form>
+	  </div>
+	</div>
+</main>
 <% include ../partials/footer.ejs %>

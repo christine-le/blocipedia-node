@@ -8,20 +8,37 @@ const stripe = require("stripe")(process.env.stripe_secret);
 module.exports = {
 	authenticate(req, res, next) {
 	    if (!req.user){
-	      req.flash("notice", "Please sign in")
+	      req.flash("notice", "You need to sign in or sign up before continuing.")
 	      return res.redirect("/users/login");
 	    } else {
 	      next();
 	    }
 	},
 	update(req, res, next){
-		User.findById(req.params.id)
-	    .then(user => {
-			res.send('NOT IMPLEMENTED: User Update');
-		})
-	    .catch(err => {
-	    	res.send('NOT IMPLEMENTED: User Update');
-	    });
+		const email = req.body.email;
+		const password = req.body.password;
+		const password_conf = req.body.password_conf;
+
+		if (password != password_conf) {
+			req.flash("notice", "Password confirmation does not match.  Please try again.")
+			res.redirect(`/users/edit/${req.params.id}`);
+		}
+		else {
+			User.update({
+	   			password: req.body.password
+			}, {
+				where: { 
+					id: req.params.id 
+				}
+			})
+			.then(user => {
+				req.flash("notice", "Password has been successly updated.")
+				res.redirect(`/users/edit/${req.params.id}`);
+			})
+		    .catch(err => {
+		    	res.render('users/edit.ejs', {error: err, user});
+		    });
+		}
    	},
    	upgrade(req, res, next){
 		User.findById(req.params.id)
@@ -31,10 +48,11 @@ module.exports = {
 			stripe.charges.create({
 				amount: 1500,
 			  	currency: "usd",
-			  	description: "Example charge",
+			  	description: "Upgrade tp premium User",
 			  	source: stripeToken,
 			}, function(err, charge) {
 			  // asynchronously called
+			  console.log('user role.......', user.role);
 			});
 			res.send('NOT IMPLEMENTED: User Update');
 		})
@@ -44,13 +62,8 @@ module.exports = {
    	},
    	logout(req, res, next){
 		req.logout();
-
 		req.flash("notice", "You've successfully signed out!");
 		res.redirect("/");
-
-		req.session.destroy(function (err) {
-		    res.redirect('/'); //Inside a callback… bulletproof!
-		});
    	},
    	signup(req, res, next){
 		const name = req.body.name;
@@ -60,7 +73,7 @@ module.exports = {
 		
 		if (password != password_conf) {
 			req.flash("notice", "Password confirmation does not match.  Please try again.")
-			res.redirect("/users/signup.ejs");
+			res.redirect("users/signup.ejs");
 		}
 		else {
 			let newUser = User.build({
@@ -73,7 +86,7 @@ module.exports = {
 				.save()
 				.then(user => {
 					req.flash("notice", "You are now signed up and can log in!")
-					res.redirect("/users/login.ejs");
+					res.redirect("users/login.ejs");
 				})
 				.catch(err => {
 					res.render('users/signup.ejs', { title: 'Signup', error: "There were problems with the sign up.  Please try again." });
@@ -84,7 +97,7 @@ module.exports = {
 	  passport.authenticate("local")(req, res, function () {
 	    if(!req.user){
 	      	req.flash("notice", "Log in failed. Please try again.")
-	      	res.redirect("/users/login.ejs");
+	      	res.redirect("users/login.ejs");
 	    } else {
 	      	req.flash("notice", "You've successfully signed in!");
 	      	res.redirect("/");

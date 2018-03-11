@@ -4,8 +4,10 @@ let wikis = [];
 
 for(let i = 1 ; i <= 15 ; i++){
   wikis.push({
-    title: faker.hacker.noun(),
-    body: faker.hacker.phrase(),
+    // title: faker.hacker.noun(),
+    // body: faker.hacker.phrase(),
+    title: faker.lorem.word(),
+    body: faker.lorem.sentence(),
     private: false,
     UserId: Math.floor(Math.random() * (4 - 1 + 1)) + 1,   // pick random user IDs between 1 - 3
     createdAt: new Date(),

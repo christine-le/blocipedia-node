@@ -1,13 +1,13 @@
 <% include ../partials/header.ejs %>
-
-<h2>Edit Profile</h2>
+<main class="container">
+  <h2>Edit Profile</h2>
   <% include ../partials/messages.ejs %>
   <div class="row">
     <div class="col-md-8">
-      <form method="POST" action="/users/update">
+      <form method="POST" action="/users/<%= user.id %>/update">
         <div class="form-group">
           <label>New Password:</label>
-          <input type="password" name="password" placeholder="Enter password" class="form-control"/>
+          <input type="password" name="curr_password" placeholder="Enter password" class="form-control"/>
         </div>
         <div class="form-group">
           <label>Confirm New Password:</label>
@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
           <label>Current password (we need your current password to confirm your changes):</label>
-          <input type="password" name="password" placeholder="Current password" class="form-control"/>
+          <input type="password" name="password_conf" placeholder="Current password" class="form-control"/>
         </div><br/>
         <input type="submit" value="Save" class="btn btn-primary"/>
       </form>
@@ -41,7 +41,7 @@
       </div>
     </div>
   <% } %>
-
+</main>
 <% include ../partials/footer.ejs %>
 
 
