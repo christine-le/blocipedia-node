@@ -24,6 +24,7 @@ module.exports = {
 			res.redirect(`/users/edit/${req.params.id}`);
 		}
 		else {
+
 			User.update({
 	   			password: req.body.password
 			}, {
@@ -51,13 +52,30 @@ module.exports = {
 			  	description: "Upgrade tp premium User",
 			  	source: stripeToken,
 			}, function(err, charge) {
-			  // asynchronously called
-			  console.log('user role.......', user.role);
+			  	user.role = 1;
+			  	user.save();
+
+			  	req.flash("notice", "You are now a premium user!");
+				res.redirect("/");
 			});
-			res.send('NOT IMPLEMENTED: User Update');
 		})
 	    .catch(err => {
-	    	res.send('NOT IMPLEMENTED: User Update');
+	    	req.flash("notice", "Error upgrading.  Please try again.");
+	    	res.redirect(`/users/edit/${req.params.id}`);
+	    });
+   	},
+   	downgrade(req, res, next){
+		User.findById(req.params.id)
+	    .then(user => {
+		  	user.role = 0;
+		  	user.save();
+
+		  	req.flash("notice", "You are now a standard user!");
+			res.redirect("/");
+		})
+	    .catch(err => {
+	    	req.flash("notice", "Error upgrading.  Please try again.");
+	    	res.redirect(`/users/edit/${req.params.id}`);
 	    });
    	},
    	logout(req, res, next){

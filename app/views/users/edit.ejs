@@ -22,26 +22,30 @@
     </div>
   </div>
   <br/>
-  <% if (user.role == 0){%>
-    <div class="row">
-      <div class="col-md-8">
-        <h2>Upgrade to a premium Blocipedia Account</h2>
-        <form method="POST" action="/users/upgrade">
-          <script
-            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="pk_test_674IBw3mQXeoOdvyfxgRv2Eg"
-            data-amount="1500"
-            data-name="Stripe.com"
-            data-description="Example charge"
-            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-            data-locale="auto"
-            data-zip-code="true">
-          </script>
-        </form>
-      </div>
+  <div class="row">
+    <div class="col-md-8">
+    <% if (user.role == 0){%>
+      <h2>Upgrade to a premium Blocipedia account</h2>
+      <form method="POST" action="/users/<%= user.id %>/upgrade">
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="pk_test_674IBw3mQXeoOdvyfxgRv2Eg"
+          data-amount="1500"
+          data-name="Stripe.com"
+          data-description="Example charge"
+          data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+          data-locale="auto"
+          data-zip-code="true">
+        </script>
+      </form>
+    <% } %>
+    <% if (user.role == 1){%>
+      <h2>Cancel your a premium Blocipedia subscription</h2>
+      <form method="POST" action="/users/<%= user.id %>/downgrade">
+        <input type="submit" value="Cancel" class="btn btn-primary"/>
+      </form>
+    <% } %>
     </div>
-  <% } %>
+  </div>
 </main>
 <% include ../partials/footer.ejs %>
-
-

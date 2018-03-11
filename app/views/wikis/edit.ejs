@@ -13,6 +13,12 @@
 			      <label>Body</label>
 			      <textarea rows="4" name="body" placeholder="Enter wiki body" class="form-control"/><%= wiki.body %></textarea>
 			    </div>
+			    <% if (user.role == 2 || user.role == 1) {%>
+			        <div class="form-group">
+			          	<label>Private</label>
+			          	<input type="checkbox" name="private" value="private"/>
+			        </div>
+			    <% } %>
 			    <input type="submit" value="Save" class="btn btn-primary"/>
 			</form>
 	  	</div>
