@@ -1,17 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const Wiki = require('../models').Wiki;
+const User = require('../models').User;
+const Collaborator = require('../models').Collaborator;
 const markdown = require( "markdown" ).markdown;
 
 module.exports = {
 	index(req, res, next){
+		// Wiki.scope('defaultScope', { method: ['getByOwner', req.params.userId]}).findAll({
 		Wiki.findAll({
-	    	where: {
-	    		private: false
-	    	}
+	    	// where: {
+	    	// 	private: false
+	    	// }
+
+	    	// role 0 = private: false 
+	    	// role 1 (premium) = private: false or owner or are collaborators
+	    	// role 2 (admin) = show all
 	    })
 	    .then(wikis => {
-			res.render('wikis/index.ejs', { wikis });
+			res.render('wikis/index.ejs', {wikis});
 		})
 	    .catch(err => {
 	    	res.render('wikis/index.ejs', { title: 'Wikis'});
@@ -28,9 +35,13 @@ module.exports = {
 	    });
    	},
    	update(req, res, next){
+   		if (!req.body.private)
+   			req.body.private = false;
+
    		Wiki.update({
    			title: req.body.title,
-   			body: req.body.body
+   			body: req.body.body,
+   			private: req.body.private
 		}, {
 			where: { 
 				id: req.params.id 
@@ -40,11 +51,17 @@ module.exports = {
 			res.redirect(`/wikis/${req.params.id}`);
 		})
 	    .catch(err => {
-	    	res.render('wikis/show.ejs', {error: err});
+	    	req.flash("error", "Error saving wiki.  Please try again.")
+	    	res.redirect(`/wikis/${req.params.id}/edit`);
 	    });
    	},
    	edit(req, res, next){
-		Wiki.findById(req.params.id)
+		Wiki.findById(req.params.id,{
+			include: [
+     			{model: Collaborator, as: "collaborators", include: [
+     			{model: User}
+     		]},
+		]})
 	    .then(wiki => {
 			res.render('wikis/edit.ejs', { wiki });
 		})
@@ -61,5 +78,5 @@ module.exports = {
 	    .catch(err => {
 	    	res.render('wikis/index.ejs', {error: err});
 	    });
-   	},
+   	}
 }

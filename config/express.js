@@ -10,6 +10,7 @@ const methodOverride = require('method-override');
 const static = require('../routes/static');
 const users = require('../routes/users');
 const wikis = require('../routes/wikis');
+const collaborators = require('../routes/collaborators');
 
 const passport = require('passport');
 const session = require("express-session");
@@ -55,6 +56,7 @@ module.exports = (app, config) => {
   app.use(static);
   app.use(users);
   app.use(wikis);
+  app.use(collaborators);
 
   app.use((req, res, next) => {
     var err = new Error('Not Found');

@@ -28,6 +28,18 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true
   });
 
+  User.associate = function(models) {
+    User.hasMany(models.Collaborator, {
+      foreignKey: "userId",
+      onDelete: "CASCADE"
+    });
+
+    User.hasMany(models.Wiki, {
+      foreignKey: "UserId",
+      onDelete: "CASCADE"
+    });
+  };
+
   User.prototype.comparePassword = function(password, cb) {
     bcrypt.compare(password, this.password, function(err, isMatch){
       if(err){
